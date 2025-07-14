@@ -1,0 +1,295 @@
+{% extends 'header.html' %}
+
+{% block content %}
+
+<section class="py-3 bg-light">
+  <div class="container">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Category name</a></li>
+        <li class="breadcrumb-item"><a href="#">Sub category</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Items</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content bg-white padding-y">
+<div class="container">
+
+<!-- ============================ ITEM DETAIL ======================== -->
+	<div class="row">
+		<aside class="col-md-6">
+<div class="card">
+<article class="gallery-wrap"> 
+	<div class="img-big-wrap">
+	  <div> <a href="#"><img src="{{ mahsulot.media_set.first.rasm.url }}"></a></div>
+	</div> <!-- slider-product.// -->
+	<div class="thumbs-wrap">
+	    {% for media in mahsulot.media_set.all|slice:"1:6" %}
+	  <a href="#" class="item-thumb"> <img src="{{ media.rasm.url }}"></a>
+	    {% endfor %}
+    </div> <!-- slider-nav.// -->
+</article> <!-- gallery-wrap .end// -->
+</div> <!-- card.// -->
+		</aside>
+		<main class="col-md-6">
+<article class="product-info-aside">
+
+<h2 class="title mt-3">{{ mahsulot.nom }} </h2>
+
+<div class="rating-wrap my-3">
+	<ul class="rating-stars">
+		<li style="width:80%" class="stars-active"> 
+			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+			<i class="fa fa-star"></i> 
+		</li>
+		<li>
+			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
+			<i class="fa fa-star"></i> 
+		</li>
+	</ul>
+	<small class="label-rating text-muted">132 reviews</small>
+	<small class="label-rating text-success"> <i class="fa fa-clipboard-check"></i> 154 orders </small>
+</div> <!-- rating-wrap.// -->
+
+<div class="mb-3"> 
+	<var class="price h4">USD {{ mahsulot.narx }}</var>
+	<span class="text-muted">{{ mahsulot.chegirma }}% chegirma</span>
+</div> <!-- price-detail-wrap .// -->
+
+<p>{{ mahsulot.batafsil }} </p>
+
+
+<dl class="row">
+  <dt class="col-sm-3">Manufacturer</dt>
+  <dd class="col-sm-9"><a href="#">{{ mahsulot.brend }}</a></dd>
+
+  <dt class="col-sm-3">Article number</dt>
+  <dd class="col-sm-9">{{ mahsulot.id }}</dd>
+
+  <dt class="col-sm-3">Guarantee</dt>
+  <dd class="col-sm-9">{{ mahsulot.kafolat }}</dd>
+
+  <dt class="col-sm-3">Delivery time</dt>
+  <dd class="col-sm-9">{{ mahsulot.yetkazish }}</dd>
+
+  <dt class="col-sm-3">Do'konda</dt>
+    {% if mahsulot.mavjud %}
+  <dd class="col-sm-9">Mavjud</dd>
+    {% else %}
+    <dd class="col-sm-9">Mavjud emas</dd>
+    {% endif %}
+</dl>
+
+	<div class="form-row  mt-4">
+		<div class="form-group col-md flex-grow-0">
+			<div class="input-group mb-3 input-spinner">
+			  <div class="input-group-prepend">
+			    <button class="btn btn-light" type="button" id="button-plus"> + </button>
+			  </div>
+			  <input type="text" class="form-control" value="1">
+			  <div class="input-group-append">
+			    <button class="btn btn-light" type="button" id="button-minus"> &minus; </button>
+			  </div>
+			</div>
+		</div> <!-- col.// -->
+		<div class="form-group col-md">
+			<a href="#"  class="btn  btn-primary"> 
+				<i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span> 
+			</a>
+			<a href="#" class="btn btn-light">
+        <i class="fas fa-envelope"></i> <span class="text">Contact supplier</span> 
+			</a>
+		</div> <!-- col.// -->
+	</div> <!-- row.// -->
+
+</article> <!-- product-info-aside .// -->
+		</main> <!-- col.// -->
+	</div> <!-- row.// -->
+
+<!-- ================ ITEM DETAIL END .// ================= -->
+
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+<div class="container d-flex justify-content-center align-items-center">
+<form method="post"> {%csrf_token%}
+  <div class="form-group">
+    <label for="smileyRating">Your rating</label>
+   <div class="rating-container d-flex" id="smileyRating" style="gap: 20px;">
+      <input type="radio" name="rating" value="1" id="smiley1" style="display:none;">
+      <label class="smiley-face" for="smiley1" style="cursor: pointer">&#9785;</label>
+      <input type="radio" name="rating" value="2" id="smiley2" style="display:none;">
+      <label class="smiley-face" for="smiley2" style="cursor: pointer">&#x1F610;</label>
+      <input type="radio" name="rating" value="3" id="smiley3" style="display:none;">
+      <label class="smiley-face" for="smiley3" style="cursor: pointer">&#x1F642;</label>
+      <input type="radio" name="rating" value="4" id="smiley4" style="display:none;">
+      <label class="smiley-face" for="smiley4" style="cursor: pointer">&#x1F600;</label>
+      <input type="radio" name="rating" value="5" id="smiley5" style="display:none;">
+      <label class="smiley-face" for="smiley5" style="cursor: pointer">&#x1F929;</label>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputComment1">Your comment</label>
+    <input type="text" class="form-control" id="exampleInputComment1" aria-describedby="commentHelp" placeholder="Enter your comment" name="comment">
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<div id="selectedRating"></div>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+    var smileyFaces = document.querySelectorAll('.smiley-face');
+
+    smileyFaces.forEach((face) => {
+      face.addEventListener('click', () => {
+        // reset transform of all smiley faces
+        smileyFaces.forEach((face) => {
+          face.style.transform = "none"; // add !important if necessary
+        });
+        // scale up the clicked smiley face
+        face.style.transform = "scale(2)"; // add !important if necessary
+      });
+    });
+  });
+</script>
+</div>
+
+
+<div class="container mt-5">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <h2 class="text-center mb-4">Reviews</h2>
+      <hr>
+      {% for izoh in izohlar %}
+        <div class="row">
+          <div class="col-sm-2">
+            <div class="text-center">
+              {% if izoh.reyting == 1 %}
+                <span class="smiley-face">&#9785;</span>
+              {% elif izoh.reyting == 2 %}
+                <span class="smiley-face">&#x1F610;</span>
+              {% elif izoh.reyting == 3 %}
+                <span class="smiley-face">&#x1F642;</span>
+              {% elif izoh.reyting == 4 %}
+                <span class="smiley-face">&#x1F600;</span>
+              {% elif izoh.reyting == 5 %}
+                <span class="smiley-face">&#x1F929;</span>
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-sm-10">
+            <p>{{ izoh.matn }}</p>
+             <div class="user d-flex" style="gap: 300px">
+                <p><small class="text-muted">{{ izoh.sana }}</small></p>
+                <p><small class="text-muted">{{ izoh.profil.ism }}</small></p>
+            </div>
+          </div>
+        </div>
+        <hr>
+      {% empty %}
+        <p>No reviews yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+
+<!-- ========================= SECTION SUBSCRIBE  ========================= -->
+<section class="padding-y-lg bg-light border-top">
+<div class="container">
+
+<p class="pb-2 text-center">Delivering the latest product trends and industry news straight to your inbox</p>
+
+<div class="row justify-content-md-center">
+  <div class="col-lg-4 col-sm-6">
+<form class="form-row">
+    <div class="col-8">
+    <input class="form-control" placeholder="Your Email" type="email">
+    </div> <!-- col.// -->
+    <div class="col-4">
+    <button type="submit" class="btn btn-block btn-warning"> <i class="fa fa-envelope"></i> Subscribe </button>
+    </div> <!-- col.// -->
+</form>
+<small class="form-text">We’ll never share your email address with a third-party. </small>
+  </div> <!-- col-md-6.// -->
+</div>
+  
+
+</div>
+</section>
+<!-- ========================= SECTION SUBSCRIBE END// ========================= -->
+
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="section-footer bg-secondary">
+  <div class="container">
+    <section class="footer-top padding-y-lg text-white">
+      <div class="row">
+        <aside class="col-md col-6">
+          <h6 class="title">Brands</h6>
+          <ul class="list-unstyled">
+            <li> <a href="#">Adidas</a></li>
+            <li> <a href="#">Puma</a></li>
+            <li> <a href="#">Reebok</a></li>
+            <li> <a href="#">Nike</a></li>
+          </ul>
+        </aside>
+        <aside class="col-md col-6">
+          <h6 class="title">Company</h6>
+          <ul class="list-unstyled">
+            <li> <a href="#">About us</a></li>
+            <li> <a href="#">Career</a></li>
+            <li> <a href="#">Find a store</a></li>
+            <li> <a href="#">Rules and terms</a></li>
+            <li> <a href="#">Sitemap</a></li>
+          </ul>
+        </aside>
+        <aside class="col-md col-6">
+          <h6 class="title">Help</h6>
+          <ul class="list-unstyled">
+            <li> <a href="#">Contact us</a></li>
+            <li> <a href="#">Money refund</a></li>
+            <li> <a href="#">Order status</a></li>
+            <li> <a href="#">Shipping info</a></li>
+            <li> <a href="#">Open dispute</a></li>
+          </ul>
+        </aside>
+        <aside class="col-md col-6">
+          <h6 class="title">Account</h6>
+          <ul class="list-unstyled">
+            <li> <a href="#"> User Login </a></li>
+            <li> <a href="#"> User register </a></li>
+            <li> <a href="#"> Account Setting </a></li>
+            <li> <a href="#"> My Orders </a></li>
+          </ul>
+        </aside>
+        <aside class="col-md">
+          <h6 class="title">Social</h6>
+          <ul class="list-unstyled">
+            <li><a href="#"> <i class="fab fa-facebook"></i> Facebook </a></li>
+            <li><a href="#"> <i class="fab fa-twitter"></i> Twitter </a></li>
+            <li><a href="#"> <i class="fab fa-instagram"></i> Instagram </a></li>
+            <li><a href="#"> <i class="fab fa-youtube"></i> Youtube </a></li>
+          </ul>
+        </aside>
+      </div> <!-- row.// -->
+    </section>  <!-- footer-top.// -->
+
+    <section class="footer-bottom text-center">
+    
+        <p class="text-white">Privacy Policy - Terms of Use - User Information Legal Enquiry Guide</p>
+        <p class="text-muted"> &copy 2019 Company name, All rights reserved </p>
+        <br>
+    </section>
+  </div><!-- //container -->
+</footer>
+<!-- ========================= FOOTER END // ========================= -->
+
+{% endblock %}
