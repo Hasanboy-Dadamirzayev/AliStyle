@@ -125,4 +125,8 @@ class ProfileSettingsView(LoginRequiredMixin, View):
 
         return redirect('profile-settings')
 
+def logout_view(request):
+    logout(request)
+    return redirect('home')
+
 

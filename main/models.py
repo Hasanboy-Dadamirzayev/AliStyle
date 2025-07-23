@@ -34,6 +34,7 @@ class SubCategory(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
     slug = models.SlugField(max_length=255, unique=True, blank=True)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
 
     def save(self, *args, **kwargs):
         if not self.slug:

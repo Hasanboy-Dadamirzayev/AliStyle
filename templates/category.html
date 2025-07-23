@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container">
+
+<nav class="row">
+  {% for sub_category in category.subcategory_set.all %}
+    <div class="col-md-3" style="padding: 15px;">
+      <div class="card card-category" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; height: 100%;">
+        <div class="img-wrap" style="background: #ffd7d7; display: flex; justify-content: center; align-items: center; height: 200px;">
+          <img src="{{ sub_category.image.url }}" alt="{{ sub_category.title }}" style="max-height: 100%; max-width: 100%; object-fit: contain;">
+        </div>
+        <div class="card-body" style="padding: 15px; text-align: center;">
+          <h4 class="card-title" style="font-size: 18px; font-weight: 600; margin: 0;">
+            <a href="{% url 'sub-category' category.slug sub_category.slug %}" style="text-decoration: none; color: #333;">{{ sub_category.title }}</a>
+          </h4>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</nav>
+
+<!-- row.// -->
+
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+
+
+<!-- ========================= SECTION SUBSCRIBE  ========================= -->
+<section class="padding-y-lg bg-light border-top">
+<div class="container">
+
+<p class="pb-2 text-center">Delivering the latest product trends and industry news straight to your inbox</p>
+
+<div class="row justify-content-md-center">
+	<div class="col-lg-4 col-sm-6">
+<form class="form-row">
+		<div class="col-8">
+		<input class="form-control" placeholder="Your Email" type="email">
+		</div> <!-- col.// -->
+		<div class="col-4">
+		<button type="submit" class="btn btn-block btn-warning"> <i class="fa fa-envelope"></i> Subscribe </button>
+		</div> <!-- col.// -->
+</form>
+<small class="form-text">We’ll never share your email address with a third-party. </small>
+	</div> <!-- col-md-6.// -->
+</div>
+	
+
+</div>
+</section>
+<!-- ========================= SECTION SUBSCRIBE END// ========================= -->
+
+
+
+
+</body>
+</html>
+
+{% endblock %}
