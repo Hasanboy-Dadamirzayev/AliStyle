@@ -29,23 +29,26 @@ class Category(models.Model):
     def __str__(self):
         return self.title
 
+
 class SubCategory(models.Model):
     title = models.CharField(max_length=255)
     image = models.ImageField(upload_to='image/', blank=True, null=True)
-    slug = models.SlugField(max_length=255, unique=True)
+    slug = models.SlugField(max_length=255, unique=True, blank=True)
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            slug = slugify(self.title)
-            base_slug = slug
-
-            count = 0
-            while SubCategory.objects.filter(slug=slug).existes():
-                base_slug = slug + str(count)
+            base_slug = slugify(self.title)
+            slug = base_slug
+            count = 1
+            while SubCategory.objects.filter(slug=slug).exists():
+                slug = f"{base_slug}-{count}"
                 count += 1
-
-                self.slug = base_slug
+            self.slug = slug
         super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title
+
 
 class Products(models.Model):
     name = models.CharField(max_length=255)
@@ -116,6 +119,13 @@ class Discount(models.Model):
         return f"{self.product.name} - {self.percentage}"
 
 
+class Banner(models.Model):
+    title = models.CharField(max_length=255)
+    image = models.ImageField(upload_to='banners/')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title
 
 
 

@@ -15,3 +15,7 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
+
+
+    def get_full_address(self):
+        return f'{self.city} {self.country}'
