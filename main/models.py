@@ -51,6 +51,9 @@ class SubCategory(models.Model):
         return self.title
 
 
+
+
+
 class Products(models.Model):
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True)
@@ -73,20 +76,21 @@ class Products(models.Model):
             base_slug = slug
             count = 0
             while Products.objects.filter(slug=slug).exists():
-                base_slug = slug + str(count)
+                slug = f"{base_slug}-{count}"
                 count += 1
-
-            self.slug = base_slug
-
+            self.slug = slug
         super().save(*args, **kwargs)
 
 
 class Image(models.Model):
     image = models.ImageField(upload_to='image/', null=True, blank=True)
-    product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name='images')
 
     def __str__(self):
         return self.product.name
+
+
+
 
 
 class Review(models.Model):
