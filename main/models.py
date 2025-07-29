@@ -1,5 +1,6 @@
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
+from django.db.models import Avg
 from django.utils.text import slugify
 from django.conf import settings
 
@@ -67,6 +68,13 @@ class Products(models.Model):
     views = models.PositiveSmallIntegerField(default=0)
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
+
+    def get_average_rating(self):
+        reviews = self.review_set.all()
+        if reviews.exists():
+            return round(sum([r.rating for r in reviews]) / reviews.count(), 1)
+        return 0
+
     def __str__(self):
         return self.name
 
@@ -100,8 +108,15 @@ class Review(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def get_average_rating(self):
+        return self.review_set.aggregate(avg=Avg('rating'))['avg'] or 0
+
     def __str__(self):
         return self.comment
+
+    class Meta:
+        unique_together = ('product', 'user')  # Bitta foydalanuvchi bir marta baholasin
+
 
 
 class Favorite(models.Model):
@@ -131,6 +146,5 @@ class Banner(models.Model):
 
     def __str__(self):
         return self.title
-
 
 

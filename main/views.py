@@ -2,6 +2,11 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .models import *
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Products, Review
+from django.contrib.auth.decorators import login_required
+
+
 
 class IndexView(View):
     def get(self, request):
@@ -73,11 +78,42 @@ class SubCategoryView(LoginRequiredMixin, View):
         return render(request, 'subcategory.html', context)
 
 
-class ProductView(LoginRequiredMixin, View):
-    def get(self, request, slug):
-        product = get_object_or_404(Products, slug=slug)
+@login_required
+def product_detail(request, slug):
+    product = get_object_or_404(Products, slug=slug)
+    reviews = Review.objects.filter(product=product)
 
-        context = {
-            'product': product
-        }
-        return render(request, 'product-info.html', context)
+    # GET dan main_image ni olish
+    main_image_id = request.GET.get('main_image')
+    if main_image_id:
+        try:
+            main_image = Image.objects.get(id=main_image_id, product=product)
+        except Image.DoesNotExist:
+            main_image = product.images.first()
+    else:
+        main_image = product.images.first()
+
+    # POST so‘rovni qayta ishlash (rating + comment)
+    if request.method == 'POST':
+        rating = int(request.POST.get('rating', 0))
+        comment = request.POST.get('comment', '')
+
+        if rating:
+            Review.objects.update_or_create(
+                product=product,
+                user=request.user,
+                defaults={
+                    'rating': rating,
+                    'comment': comment,
+                }
+            )
+        return redirect('product', slug=product.slug)  # URL nomi 'product' bo‘lishi kerak
+
+    average_rating = reviews.aggregate(avg=Avg('rating'))['avg'] or 0
+
+    return render(request, 'product-info.html', {
+        'product': product,
+        'izohlar': reviews,
+        'average_rating': average_rating,
+        'main_image': main_image,
+    })

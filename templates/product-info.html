@@ -2,13 +2,44 @@
 
 {% block content %}
 
+<style>
+    <style>
+    .img-big-wrap img {
+        max-height: 500px;
+        object-fit: contain;
+        width: 100%;
+    }
+
+
+    .img-big-wrap img {
+        max-height: 600px; /* Kichikroq qilish uchun shu qiymatni kamaytiring */
+        max-width: 100%;
+        object-fit: contain;
+        border-radius: 10px;
+    }
+
+
+
+    .thumbs-wrap img {
+        border-radius: 5px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+    .thumbs-wrap img:hover {
+        transform: scale(1.05);
+        border: 2px solid #007bff;
+    }
+</style>
+
+</style>
+
 <section class="py-3 bg-light">
   <div class="container">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="#">Home</a></li>
-        <li class="breadcrumb-item"><a href="#">Category name</a></li>
-        <li class="breadcrumb-item"><a href="#">Sub category</a></li>
-        <li class="breadcrumb-item active" aria-current="page">Items</li>
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category' product.sub_category.category.slug %}">{{ product.sub_category.category.title }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'category' product.sub_category.category.slug %}">{{ product.sub_category.title }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li>
     </ol>
   </div>
 </section>
@@ -18,97 +49,104 @@
 <div class="container">
 
 <!-- ============================ ITEM DETAIL ======================== -->
-	<div class="row">
-		<aside class="col-md-6">
-<div class="card">
-<article class="gallery-wrap"> 
-	<div class="img-big-wrap">
-	  <div> <a href="#"><img src="{{ mahsulot.media_set.first.rasm.url }}"></a></div>
-	</div> <!-- slider-product.// -->
-	<div class="thumbs-wrap">
-	    {% for media in mahsulot.media_set.all|slice:"1:6" %}
-	  <a href="#" class="item-thumb"> <img src="{{ media.rasm.url }}"></a>
-	    {% endfor %}
-    </div> <!-- slider-nav.// -->
-</article> <!-- gallery-wrap .end// -->
-</div> <!-- card.// -->
-		</aside>
-		<main class="col-md-6">
-<article class="product-info-aside">
+<div class="row">
+    <!-- LEFT: Rasmlar -->
+    <div class="col-md-6">
+        <!-- Asosiy rasm -->
+        <div class="img-big-wrap mb-3">
+            {% if main_image %}
+                <img src="{{ main_image.image.url }}" alt="{{ product.name }}" class="img-fluid">
+            {% else %}
+                <p>No image available</p>
+            {% endif %}
+        </div>
 
-<h2 class="title mt-3">{{ mahsulot.nom }} </h2>
-
-<div class="rating-wrap my-3">
-	<ul class="rating-stars">
-		<li style="width:80%" class="stars-active"> 
-			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
-			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
-			<i class="fa fa-star"></i> 
-		</li>
-		<li>
-			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
-			<i class="fa fa-star"></i> <i class="fa fa-star"></i> 
-			<i class="fa fa-star"></i> 
-		</li>
-	</ul>
-	<small class="label-rating text-muted">132 reviews</small>
-	<small class="label-rating text-success"> <i class="fa fa-clipboard-check"></i> 154 orders </small>
-</div> <!-- rating-wrap.// -->
-
-<div class="mb-3"> 
-	<var class="price h4">USD {{ mahsulot.narx }}</var>
-	<span class="text-muted">{{ mahsulot.chegirma }}% chegirma</span>
-</div> <!-- price-detail-wrap .// -->
-
-<p>{{ mahsulot.batafsil }} </p>
+        <!-- Thumb rasmlar -->
+        <div class="thumbs-wrap d-flex gap-2">
+            {% for media in product.images.all %}
+                <a href="?main_image={{ media.id }}" class="item-thumb {% if media.id == main_image.id %}border border-primary{% endif %}">
+                    <img src="{{ media.image.url }}" alt="thumb" style="width: 60px; height: 60px; object-fit: cover;">
+                </a>
+            {% endfor %}
+        </div>
+    </div>
 
 
-<dl class="row">
-  <dt class="col-sm-3">Manufacturer</dt>
-  <dd class="col-sm-9"><a href="#">{{ mahsulot.brend }}</a></dd>
+    <!-- RIGHT: Mahsulot haqida ma’lumot -->
+    <div class="col-md-6">
 
-  <dt class="col-sm-3">Article number</dt>
-  <dd class="col-sm-9">{{ mahsulot.id }}</dd>
+    <!-- ★★ Rating yulduzchalar ★★ -->
 
-  <dt class="col-sm-3">Guarantee</dt>
-  <dd class="col-sm-9">{{ mahsulot.kafolat }}</dd>
-
-  <dt class="col-sm-3">Delivery time</dt>
-  <dd class="col-sm-9">{{ mahsulot.yetkazish }}</dd>
-
-  <dt class="col-sm-3">Do'konda</dt>
-    {% if mahsulot.mavjud %}
-  <dd class="col-sm-9">Mavjud</dd>
+  <div class="mb-3">
+    <label class="form-label">Your rating:</label><br>
+   <!-- Yulduz baho ko‘rsatish -->
+<div class="star-display my-3">
+  {% for i in "12345" %}
+    {% if average_rating|floatformat:1 >= i %}
+      <span style="color: gold; font-size: 25px">&#9733;</span>
+    {% elif average_rating|floatformat:1 >= i|add:"-0.5" %}
+      <span style="color: gold; font-size: 25px">&#9733;</span> <!-- Half starni farqlash qiyin, agar kerak bo‘lsa belgilab beraman -->
     {% else %}
-    <dd class="col-sm-9">Mavjud emas</dd>
+      <span style="color: #ccc; font-size: 25px">&#9733;</span>
     {% endif %}
-</dl>
+  {% endfor %}
+  <small>({{ average_rating }})</small>
+</div>
 
-	<div class="form-row  mt-4">
-		<div class="form-group col-md flex-grow-0">
-			<div class="input-group mb-3 input-spinner">
-			  <div class="input-group-prepend">
-			    <button class="btn btn-light" type="button" id="button-plus"> + </button>
-			  </div>
-			  <input type="text" class="form-control" value="1">
-			  <div class="input-group-append">
-			    <button class="btn btn-light" type="button" id="button-minus"> &minus; </button>
-			  </div>
-			</div>
-		</div> <!-- col.// -->
-		<div class="form-group col-md">
-			<a href="#"  class="btn  btn-primary"> 
-				<i class="fas fa-shopping-cart"></i> <span class="text">Add to cart</span> 
-			</a>
-			<a href="#" class="btn btn-light">
-        <i class="fas fa-envelope"></i> <span class="text">Contact supplier</span> 
-			</a>
-		</div> <!-- col.// -->
-	</div> <!-- row.// -->
+  </div>
 
-</article> <!-- product-info-aside .// -->
-		</main> <!-- col.// -->
-	</div> <!-- row.// -->
+
+
+
+<style>
+  .star-rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    font-size: 30px;
+  }
+
+  .star-rating input {
+    display: none;
+  }
+
+  .star-rating label {
+    color: #ccc;
+    cursor: pointer;
+  }
+
+  .star-rating input:checked ~ label,
+  .star-rating label:hover,
+  .star-rating label:hover ~ label {
+    color: #f4c542;
+  }
+</style>
+
+
+    <!-- Mahsulot narxi -->
+    <h4 class="text-warning mt-4">USD <small>% chegirma</small></h4>
+
+    <!-- Mahsulot haqida ma'lumotlar -->
+    <ul class="list-unstyled">
+        <li><strong>Manufacturer:</strong> {{ product.brand }}</li>
+        <li><strong>Article number:</strong> {{ product.id }}</li>
+        <li><strong>Guarantee:</strong> {{ product.guarantee }}</li>
+        <li><strong>Delivery time:</strong> {{ product.delivery_time }}</li>
+        <li><strong>Do'konda:</strong> <span class="text-danger">Mavjud emas</span></li>
+    </ul>
+
+    <!-- Harid qilish tugmalari -->
+    <div class="mt-3">
+        <div class="input-group mb-2" style="max-width: 120px;">
+            <button class="btn btn-outline-secondary" type="button">-</button>
+            <input type="text" class="form-control text-center" value="1">
+            <button class="btn btn-outline-secondary" type="button">+</button>
+        </div>
+        <button class="btn btn-warning me-2">🛒 Add to cart</button>
+        <button class="btn btn-outline-dark">✉️ Contact supplier</button>
+    </div>
+</div>
+
+</div>
 
 <!-- ================ ITEM DETAIL END .// ================= -->
 
