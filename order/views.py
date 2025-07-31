@@ -8,9 +8,11 @@ from .models import *
 class OrderView(LoginRequiredMixin, View):
     def get(self, request):
         cart_items = request.user.cartitem_set.all()
+        wishlist_products = request.user.favorite_set.values_list('product__id', flat=True)
 
         context = {
-            'cart_items': cart_items
+            'cart_items': cart_items,
+            'wishlist_products': wishlist_products
         }
         return render(request, 'order.html', context)
 

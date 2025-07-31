@@ -89,7 +89,8 @@
 					<div class="widget-header mr-3">
 						<a href="{% url 'my-cart' %}" class="widget-view">
 							<div class="icon-area">
-								<i class="fa fa-store"></i>
+								<i class="fa fa-cart-plus"></i>
+								<span class="notify">{{ request.user.order_set.count }}</span>
 							</div>
 							<small class="text"> Orders </small>
 						</a>

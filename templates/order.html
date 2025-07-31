@@ -20,6 +20,7 @@
 </tr>
 </thead>
 <tbody>
+
 {% for cart_item in cart_items %}
 <tr>
 
@@ -51,14 +52,17 @@
 			<small  class="text-muted"> {{cart_item.product.price}} so'm har biri </small>
 		</div> <!-- price-wrap .// -->
 	</td>
-	<td class="text-right"> 
-	<a data-original-title="Save to Wishlist" title="" href="/tanlangan_qosh/{{savat.id}}/" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a>
+
+	<td class="text-right">
+	<a data-original-title="Save to Wishlist" title="" href="{% url 'add-to-wishlist-for-cart' cart_item.product.id %}" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart" {% if cart_item.product.id in wishlist_products %} style="color: red;" {% endif %} ></i></a>
 	<a href="{% url 'remove-from-cart' cart_item.product.id %}" class="btn btn-light btn-round"> Remove</a>
 	</td>
+
 </tr>
 {% empty %}
 <td>No prodcuts yet</td>
 {% endfor %}
+
 </tbody>
 </table>
 

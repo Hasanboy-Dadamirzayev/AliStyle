@@ -135,3 +135,25 @@ class AddToWishlistView(LoginRequiredMixin, View):
             product=product
         )
         return redirect('wishlist')
+
+
+class RemoveFromWishlistView(LoginRequiredMixin, View):
+    def get(self, request, favorite_id):
+        favorite = get_object_or_404(Favorite, id=favorite_id)
+        favorite.delete()
+        return redirect('wishlist')
+
+
+class AddToWishlistForCartView(LoginRequiredMixin, View):
+    def get(self, request, product_id):
+        product = get_object_or_404(Products, id=product_id)
+
+        favorites = Favorite.objects.filter(user=request.user, product=product)
+        if favorites.exists():
+            favorites.delete()
+        else:
+            Favorite.objects.create(
+                user=request.user,
+                product=product
+            )
+        return redirect('my-cart')

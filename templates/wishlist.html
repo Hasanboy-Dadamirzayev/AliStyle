@@ -40,7 +40,7 @@
 							<a href="#" class="title">{{ favorite.product.name }}</a>
 							<p class="price mb-2">{{ favorite.product.price }} so'm</p>
 							<a href="{% url 'add-to-cart' favorite.product.id %}" class="btn btn-secondary btn-sm"> Add to cart </a>
-							<a href="#" class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Remove from wishlist"> <i class="fa fa-times"></i> </a>
+							<a href="{% url 'remove-from-wishlist' favorite.id %}" class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Remove from wishlist"> <i class="fa fa-times"></i> </a>
 						</figcaption>
 					</figure>
 				</div>
