@@ -78,16 +78,16 @@
 						</a>
 					</div>
 					<div class="widget-header mr-3">
-						<a href="#" class="widget-view">
+						<a href="{% url 'wishlist' %}" class="widget-view">
 							<div class="icon-area">
-								<i class="fa fa-comment-dots"></i>
-								<span class="notify">1</span>
+								<i class="fa fa-heart"></i>
+								<span class="notify">{{ request.user.favorite_set.count }}</span>
 							</div>
-							<small class="text"> Message </small>
+							<small class="text"> Wishlist </small>
 						</a>
 					</div>
 					<div class="widget-header mr-3">
-						<a href="#" class="widget-view">
+						<a href="{% url 'my-cart' %}" class="widget-view">
 							<div class="icon-area">
 								<i class="fa fa-store"></i>
 							</div>
@@ -95,7 +95,7 @@
 						</a>
 					</div>
 					<div class="widget-header">
-						<a href="#" class="widget-view">
+						<a href="{% url 'my-cart' %}" class="widget-view">
 							<div class="icon-area">
 								<i class="fa fa-shopping-cart"></i>
 							</div>

@@ -141,8 +141,12 @@
             <input type="text" class="form-control text-center" value="1">
             <button class="btn btn-outline-secondary" type="button">+</button>
         </div>
+        <a href="{% url 'add-to-cart' product.id %}">
         <button class="btn btn-warning me-2">🛒 Add to cart</button>
-        <button class="btn btn-outline-dark">✉️ Contact supplier</button>
+        </a>
+        <a href="{% url 'add-to-wishlist' product.id %}">
+        <button class="btn btn-warning me-2">Add To Wishlist</button>
+        </a>
     </div>
 </div>
 

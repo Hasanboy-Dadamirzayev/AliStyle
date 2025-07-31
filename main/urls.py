@@ -8,5 +8,7 @@ urlpatterns = [
     path('category/<category_slug>/', CategoryView.as_view(), name='category'),
     path('category/<category_slug>/<subcategory_slug>/', SubCategoryView.as_view(), name='sub-category'),
     path('product/<slug:slug>/', product_detail, name='product'),
+    path('my-wishlist/', WishListView.as_view(), name='wishlist'),
+    path('add-to-wishlist/<int:product_id>/', AddToWishlistView.as_view(), name='add-to-wishlist'),
 
 ]

@@ -117,3 +117,21 @@ def product_detail(request, slug):
         'average_rating': average_rating,
         'main_image': main_image,
     })
+
+
+class WishListView(LoginRequiredMixin, View):
+    def get(self, request):
+        favorites = Favorite.objects.filter(user=request.user)
+        context = {
+            'favorites': favorites
+        }
+        return render(request, 'wishlist.html', context)
+
+class AddToWishlistView(LoginRequiredMixin, View):
+    def get(self, request, product_id):
+        product = get_object_or_404(Products, id=product_id)
+        Favorite.objects.create(
+            user=request.user,
+            product=product
+        )
+        return redirect('wishlist')

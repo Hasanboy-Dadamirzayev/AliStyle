@@ -4,8 +4,11 @@ from main.models import *
 class CartItem(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    amount = models.PositiveSmallIntegerField(validators=[MinValueValidator(0)])
+    amount = models.PositiveSmallIntegerField(default=1, validators=[MinValueValidator(0)])
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def get_total_price(self):
+        return self.amount * self.product.price
 
     def __str__(self):
         return f"{self.user.name} - {self.product.name}"
