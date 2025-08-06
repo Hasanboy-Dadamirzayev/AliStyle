@@ -5,6 +5,7 @@ from .models import *
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Products, Review
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 
 
 
@@ -60,6 +61,13 @@ class SubCategoryView(LoginRequiredMixin, View):
 
         view = request.GET.get('view')
 
+        paginator = Paginator(products, 1)
+
+        page = request.GET.get('page')
+        products = paginator.get_page(page)
+
+        pages = range(1, paginator.num_pages + 1)
+
         context = {
             'subcategory': subcategory,
             'products': products,
@@ -70,6 +78,10 @@ class SubCategoryView(LoginRequiredMixin, View):
             'min_price': min_price,
             'max_price': max_price,
             'view': view,
+            'pages': pages,
+            'page': int(page),
+            'pr_page': int(page) - 1 if int(page) > 1 else 1,
+            'nt_page': int(page) + 1 if int(page) < paginator.num_pages else paginator.num_pages
         }
 
         if view == 'large':
