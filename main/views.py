@@ -6,21 +6,33 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import Products, Review
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.contrib.auth import logout
 
 
 
 class IndexView(View):
     def get(self, request):
-        return render(request, 'index-unauth.html')
+        banner_index = 1
+        banners = Banner.objects.all()
+        categories = Category.objects.all()
+        products = Products.objects.all()
+        context = {
+            'banners': banners,
+            'categories': categories,
+            'products': products
+        }
+        return render(request, 'index-unauth.html', context)
 
 class HomeView(LoginRequiredMixin, View):
     def get(self, request):
         banner_index = 1
         banners = Banner.objects.all()
         categories = Category.objects.all()
+        products = Products.objects.all()
         context = {
             'banners': banners,
-            'categories': categories
+            'categories': categories,
+            'products': products
         }
 
         return render(request, 'index.html', context)
@@ -62,15 +74,15 @@ class SubCategoryView(LoginRequiredMixin, View):
         view = request.GET.get('view')
 
         paginator = Paginator(products, 1)
+        page_number = request.GET.get('page')
 
-        page = request.GET.get('page')
-        products = paginator.get_page(page)
+        products_page = paginator.get_page(page_number)  # bu yerda .get_page() o‘zi noto‘g‘rilarni to‘g‘rilaydi
 
         pages = range(1, paginator.num_pages + 1)
 
         context = {
             'subcategory': subcategory,
-            'products': products,
+            'products': products_page,
             'countries': countries,
             'brands': brands,
             'filter_countries': filter_countries,
@@ -79,15 +91,16 @@ class SubCategoryView(LoginRequiredMixin, View):
             'max_price': max_price,
             'view': view,
             'pages': pages,
-            'page': int(page),
-            'pr_page': int(page) - 1 if int(page) > 1 else 1,
-            'nt_page': int(page) + 1 if int(page) < paginator.num_pages else paginator.num_pages
+            'page': products_page.number,
+            'pr_page': products_page.number - 1 if products_page.number > 1 else 1,
+            'nt_page': products_page.number + 1 if products_page.number < paginator.num_pages else paginator.num_pages
         }
 
         if view == 'large':
             return render(request, 'subcategory-large.html', context)
 
         return render(request, 'subcategory.html', context)
+
 
 
 @login_required
@@ -169,3 +182,7 @@ class AddToWishlistForCartView(LoginRequiredMixin, View):
                 product=product
             )
         return redirect('my-cart')
+
+def logout_view(request):
+    logout(request)
+    return redirect('index')

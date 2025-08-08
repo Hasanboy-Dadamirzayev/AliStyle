@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<!-- ========================= SECTION CONTENT ========================= -->
+<section class="section-content padding-y">
+<div class="container" style="max-width: 720px;">
+
+<div>
+      <form method="post">
+		  {% csrf_token %}
+      <h4 class="card-title mb-3">Delivery info</h4>
+
+	  <div class="form-row">
+			<div class="form-group col-sm-6">
+				<label class="js-check box active">
+					<input type="radio" name="delivery_type" value="Standard" checked>
+					<h6 class="title">Standart delivery</h6>
+					<p class="text-muted">Free by airline within 20 days</p>
+				</label> <!-- js-check.// -->
+			</div>
+			<div class="form-group col-sm-6">
+				<label class="js-check box">
+					<input type="radio" name="delivery_type" value="Fast">
+					<h6 class="title">Fast delivery</h6>
+					<p class="text-muted">Extra 20$ will be charged </p>
+				</label> <!-- js-check.// -->
+			</div>
+		</div> <!-- form row.// -->
+
+	<div class="form-row">
+		<div class="col form-group">
+			<label>First name</label>
+		  	<input type="text" class="form-control" value="{{ request.user.first_name }}" name="first_name">
+		</div> <!-- form-group end.// -->
+		<div class="col form-group">
+			<label>Last name</label>
+		  	<input type="text" class="form-control" value="{{ request.user.last_name }}" name="last_name">
+		</div> <!-- form-group end.// -->
+	</div> <!-- form-row end.// -->
+
+	<div class="form-row">
+
+		<div class="col form-group">
+			<label>Phone</label>
+		  	<input type="text" class="form-control" value="+{{ request.user.phone_number }}" name="phone_number">
+		</div> <!-- form-group end.// -->
+	</div> <!-- form-row end.// -->
+
+	<div class="form-row">
+		<div class="form-group col-md-6">
+		  <label>Country</label>
+			<input type="text" name="country" class="form-control">
+		</div> <!-- form-group end.// -->
+		<div class="form-group col-md-6">
+		  <label>City</label>
+		  <input type="text" class="form-control" value="{{ request.user.city }}">
+		</div> <!-- form-group end.// -->
+	</div> <!-- form-row.// -->
+	<div class="form-group">
+		<label>Adress</label>
+       <textarea class="form-control" rows="2" name="address">
+
+	   </textarea>
+    </div> <!-- form-group// -->  
+				<button class="subscribe btn btn-primary btn-block" type="submit"> Confirm  </button>
+	  </form> <!-- card-body.// -->
+    </div>  <!-- card .// -->
+
+
+
+      </div> <!-- card-body.// -->
+    </div> <!-- card .// -->
+
+
+<br><br> 
+
+</div> <!-- container .//  -->
+</section>
+<!-- ========================= SECTION CONTENT END// ========================= -->
+
+{% endblock %}

@@ -9,4 +9,6 @@ urlpatterns = [
     path('my-cart/<int:cart_item_id>/decrement/', cart_item_dec, name='decrement'),
     path('add-to-cart/<int:product_id>/', AddToCart.as_view(), name='add-to-cart'),
     path('remove-from-cart/<int:product_id>/', RemoveFromCart.as_view(), name='remove-from-cart'),
+    path('', Order1View.as_view(), name='order'),
+    path('my-orders/', OrdersView.as_view(), name='orders')
 ]
