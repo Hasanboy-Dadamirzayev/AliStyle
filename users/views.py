@@ -6,12 +6,12 @@ from django.contrib.auth import authenticate, login, logout
 from order.models import Order
 from .models import *
 from random import randint
-from eskiz_sms import EskizSMS
+
 
 email = 'dadamirzayevhasanboy5@gmail.com'
 password = 'UKK4HbFWHxyhW6o8g66XaS2eOW2yOLprBSvLp9fa'
 
-eskiz = EskizSMS(email, password)
+
 
 
 
@@ -44,7 +44,6 @@ class RegisterView(View):
             user.confirmation_code=confirmation_code
             user.save()
             login(request, user)
-            eskiz.send_sms(user.phone_number, 'Bu eskiz dan test')
             return redirect('register-confirm')
         else:
             return self.get(request)
